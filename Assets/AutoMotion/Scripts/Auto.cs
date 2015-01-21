@@ -262,29 +262,80 @@ public static class Auto
 
 #region Easing functions
 
-public enum EaseType { Linear, QuadIn, QuadOut, QuadInOut, CubeIn, CubeOut, CubeInOut, BackIn, BackOut, BackInOut, ExpoIn, ExpoOut, ExpoInOut, SineIn, SineOut, SineInOut, ElasticIn, ElasticOut, ElasticInOut }
+public enum EaseType { Linear, 
+	QuadIn, QuadOut, QuadInOut, 
+	QuartIn, QuartOut, QuartInOut,
+	QuinIn, QuinOut, QuinInOut,
+	CubeIn, CubeOut, CubeInOut, 
+	BackIn, BackOut, BackInOut, 
+	ExpoIn, ExpoOut, ExpoInOut, 
+	SineIn, SineOut, SineInOut, 
+	ElasticIn, ElasticOut, ElasticInOut, 
+	BounceIn, BounceOut, BounceInOut,
+	CircIn, CircOut, CircInOut}
 
 public static class Ease
 {
 	public static readonly Easer Linear = (t) => { return t; };
+
 	public static readonly Easer QuadIn = (t) => { return t * t; };
 	public static readonly Easer QuadOut = (t) => { return 1 - QuadIn(1 - t); };
 	public static readonly Easer QuadInOut = (t) => { return (t <= 0.5f) ? QuadIn(t * 2) / 2 : QuadOut(t * 2 - 1) / 2 + 0.5f; };
+
 	public static readonly Easer CubeIn = (t) => { return t * t * t; };
 	public static readonly Easer CubeOut = (t) => { return 1 - CubeIn(1 - t); };
 	public static readonly Easer CubeInOut = (t) => { return (t <= 0.5f) ? CubeIn(t * 2) / 2 : CubeOut(t * 2 - 1) / 2 + 0.5f; };
+
+	public static readonly Easer QuartIn = (t) => { return t * t * t * t; };
+	public static readonly Easer QuartOut = (t) => { return 1 - QuartIn(1 - t); };
+	public static readonly Easer QuartInOut = (t) => { return (t <= 0.5f) ? QuartIn(t * 2) / 2 : QuartOut(t * 2 - 1) / 2 + 0.5f; };
+
+	public static readonly Easer QuinIn = (t) => { return t * t * t * t; };
+	public static readonly Easer QuinOut = (t) => { return 1 - QuinIn(1 - t); };
+	public static readonly Easer QuinInOut = (t) => { return (t <= 0.5f) ? QuinIn(t * 2) / 2 : QuinOut(t * 2 - 1) / 2 + 0.5f; };
+
 	public static readonly Easer BackIn = (t) => { return t * t * (2.70158f * t - 1.70158f); };
 	public static readonly Easer BackOut = (t) => { return 1 - BackIn(1 - t); };
 	public static readonly Easer BackInOut = (t) => { return (t <= 0.5f) ? BackIn(t * 2) / 2 : BackOut(t * 2 - 1) / 2 + 0.5f; };
+
 	public static readonly Easer ExpoIn = (t) => { return (float)Mathf.Pow(2, 10 * (t - 1)); };
 	public static readonly Easer ExpoOut = (t) => { return 1 - ExpoIn(t); };
 	public static readonly Easer ExpoInOut = (t) => { return t < .5f ? ExpoIn(t * 2) / 2 : ExpoOut(t * 2) / 2; };
+
 	public static readonly Easer SineIn = (t) => { return -Mathf.Cos(Mathf.PI / 2 * t) + 1; };
 	public static readonly Easer SineOut = (t) => { return Mathf.Sin(Mathf.PI / 2 * t); };
 	public static readonly Easer SineInOut = (t) => { return -Mathf.Cos(Mathf.PI * t) / 2f + .5f; };
+
 	public static readonly Easer ElasticIn = (t) => { return 1 - ElasticOut(1 - t); };
 	public static readonly Easer ElasticOut = (t) => { return Mathf.Pow(2, -10 * t) * Mathf.Sin((t - 0.075f) * (2 * Mathf.PI) / 0.3f) + 1; };
 	public static readonly Easer ElasticInOut = (t) => { return (t <= 0.5f) ? ElasticIn(t * 2) / 2 : ElasticOut(t * 2 - 1) / 2 + 0.5f; };
+
+	public static readonly Easer CircOut = (t) => { return Mathf.Sqrt(1 - (t - 1) * (t - 1)); };
+	public static readonly Easer CircIn = (t) => { return -1 *(Mathf.Sqrt(1 - (t * t)) - 1 ); };
+	public static readonly Easer CircInOut = (t) => { return (t <= 0.5f) ? CircIn(t * 2) / 2.0f : CircOut(t * 2 - 1) / 2.0f + 0.5f; };
+
+	// Bounce Easing Equation Copyright © 2001 Robert Penner
+	public static readonly Easer BounceOut = (t) => 
+	{
+		if(t < 1/2.75f)
+		{
+			return 7.5625f * t * t;
+		}
+		else if (t < 2/2.75f)
+		{
+			return ( 7.5625f * ( t -= ( 1.5f / 2.75f ) ) * t + 0.75f ) ;
+		}
+		else if (t< 2.5f/2.75f)
+		{
+			return ( 7.5625f * ( t -= ( 2.25f / 2.75f ) ) * t + 0.9375f );
+		}
+		else
+		{
+			return ( 7.5625f * ( t -= ( 2.625f / 2.75f ) ) * t + 0.984375f );
+		}
+	};
+	public static readonly Easer BounceIn = (t) =>	{ return 1 - BounceOut(1 - t); };
+	public static readonly Easer BounceInOut = (t) =>	{ return (t <= 0.5f) ? BounceIn( t * 2) / 2.0f : BounceOut(t * 2 - 1 )/2.0f + 0.5f;	};
 
 	public static Easer FromType(EaseType type)
 	{
@@ -293,7 +344,7 @@ public static class Ease
 		case EaseType.Linear: return Linear;
 		case EaseType.QuadIn: return QuadIn;
 		case EaseType.QuadOut: return QuadOut;
-		case EaseType.QuadInOut: return QuadInOut;
+		case EaseType.QuadInOut: return QuadInOut; 
 		case EaseType.CubeIn: return CubeIn;
 		case EaseType.CubeOut: return CubeOut;
 		case EaseType.CubeInOut: return CubeInOut;
@@ -309,6 +360,18 @@ public static class Ease
 		case EaseType.ElasticIn: return ElasticIn;
 		case EaseType.ElasticOut: return ElasticOut;
 		case EaseType.ElasticInOut: return ElasticInOut;
+		case EaseType.BounceOut: return BounceOut;
+		case EaseType.BounceIn: return BounceIn;
+		case EaseType.BounceInOut: return BounceInOut;
+		case EaseType.CircOut: return CircOut;
+		case EaseType.CircIn: return CircIn;
+		case EaseType.CircInOut: return CircInOut;
+		case EaseType.QuartIn: return QuartIn;
+		case EaseType.QuartOut: return QuartOut;
+		case EaseType.QuartInOut: return QuartInOut;
+		case EaseType.QuinIn: return QuinIn;
+		case EaseType.QuinOut: return QuinOut;
+		case EaseType.QuinInOut: return QuinInOut;
 		}
 		return Linear;
 	}
